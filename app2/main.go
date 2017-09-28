@@ -26,6 +26,8 @@ func main() {
 		}
 
 		ctx, subseg := xray.BeginSegment(r.Context(), "GithubCall")
+		subseg.TraceID, subseg.ParentID = traceID, parentID
+
 		githubResp, err := fetchData("https://api.github.com", traceID, parentID, ctx)
 		if err != nil {
 			subseg.Close(err)
