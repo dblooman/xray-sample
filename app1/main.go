@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/DaveBlooman/xray_example/util"
+	"github.com/DaveBlooman/xray-sample/util"
 	"github.com/aws/aws-xray-sdk-go/xray"
 )
 
