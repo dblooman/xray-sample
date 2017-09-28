@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  app1:
+    container_name: xray_app1
+    depends_on:
+      - xray
+    environment:
+      - AWS_XRAY_DAEMON_ADDRESS=xray:2000
+    image: davey/xray_app1
+    links:
+      - "xray:xray"
+    ports:
+      - "8081:8081"
+    restart: always
+
+  app2:
+    container_name: xray_app2
+    depends_on:
+      - xray
+    environment:
+      - "AWS_XRAY_DAEMON_ADDRESS=xray:2000"
+    image: davey/xray_app2
+    ports:
+      - "8082:8082"
+    restart: always
+
+  app3:
+    container_name: xray_app3
+    depends_on:
+      - xray
+    environment:
+      - "AWS_XRAY_DAEMON_ADDRESS=xray:2000"
+    image: davey/xray_app3
+    ports:
+      - "8083:8083"
+    restart: always
+
+  db:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=example
+      - PGPASSWORD=postgres
+    expose:
+      - "5432"
+    image: "postgres:9.5.3"
+    ports:
+      - "5432:5432"
+
+  xray:
+    command: "--local-mode"
+    container_name: xray
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_REGION
+    image: davey/xray
+    ports:
+      - "2000:2000/udp"
